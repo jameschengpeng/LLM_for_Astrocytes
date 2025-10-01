@@ -1,3 +1,4 @@
+# index/vector_store.py
 import faiss, numpy as np, json
 from pathlib import Path
 from sentence_transformers import SentenceTransformer
@@ -11,15 +12,20 @@ class VectorStore:
         self.metas = []
 
     def build(self, corpus_jsonl: Path):
-        for line in corpus_jsonl.open():
-            rec = json.loads(line)
-            self.texts.append(rec["text"])
-            self.metas.append(rec["meta"])
+        # ⬇️ ensure UTF-8 when reading corpus
+        with corpus_jsonl.open("r", encoding="utf-8") as f:
+            for line in f:
+                rec = json.loads(line)
+                self.texts.append(rec["text"])
+                self.metas.append(rec["meta"])
+
         X = self.embed.encode(self.texts, normalize_embeddings=True, convert_to_numpy=True)
         dim = X.shape[1]
         self.index = faiss.IndexFlatIP(dim)
         self.index.add(X)
+
         np.save(INDEX_DIR / "embeddings.npy", X)
+        # ⬇️ ensure UTF-8 when writing artifacts
         (INDEX_DIR / "texts.jsonl").write_text("\n".join(self.texts), encoding="utf-8")
         with (INDEX_DIR / "metas.jsonl").open("w", encoding="utf-8") as f:
             for m in self.metas:
@@ -30,6 +36,7 @@ class VectorStore:
         X = np.load(INDEX_DIR / "embeddings.npy")
         self.index = faiss.IndexFlatIP(X.shape[1])
         self.index.add(X)
+        # ⬇️ ensure UTF-8 when reading artifacts
         self.texts = (INDEX_DIR / "texts.jsonl").read_text(encoding="utf-8").splitlines()
         self.metas = [json.loads(l) for l in (INDEX_DIR / "metas.jsonl").read_text(encoding="utf-8").splitlines()]
 

@@ -1,3 +1,4 @@
+# ingest/chunk_text.py
 import json
 from pathlib import Path
 import tiktoken
@@ -12,13 +13,14 @@ def chunk_text(text: str, tokens=CHUNK_TOKENS, overlap=CHUNK_OVERLAP):
     while i < len(ids):
         window = ids[i:i+tokens]
         chunks.append(enc.decode(window))
-        i += (tokens - overlap)
+        i += max(1, tokens - overlap)
     return chunks
 
 def run():
     inp = PROC_DIR / "parsed.jsonl"
     out = PROC_DIR / "corpus.jsonl"
-    with inp.open() as fin, out.open("w", encoding="utf-8") as fout:
+    # ⬇️ specify UTF-8 for both read and write
+    with inp.open("r", encoding="utf-8") as fin, out.open("w", encoding="utf-8") as fout:
         for line in fin:
             rec = json.loads(line)
             meta = rec["meta"]
