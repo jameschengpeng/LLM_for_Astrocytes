@@ -1,0 +1,13 @@
+# python
+__pycache__/
+*.pyc
+.venv/
+.env
+
+# indexes & processed artifacts (keep repo light)
+data/processed/
+data/index/
+
+# optional: if you ever drop PDFs inside repo by mistake
+data/raw_pdfs/
+*.pdf

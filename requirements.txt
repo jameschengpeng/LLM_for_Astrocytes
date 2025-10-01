@@ -1,0 +1,11 @@
+faiss-cpu>=1.7.4
+sentence-transformers>=3.0.0
+rank-bm25>=0.2.2
+pymupdf>=1.24.1
+tiktoken>=0.7.0
+python-dotenv>=1.0.1
+fastapi>=0.110.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.6.0
+requests>=2.31.0
+numpy>=1.26.4
