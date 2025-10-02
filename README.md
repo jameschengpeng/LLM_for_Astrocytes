@@ -171,4 +171,4 @@ A: The SHA256/mtime check will detect changes and re-parse it.
 
 ## License
 
-MIT (or whichever you prefer).
+MIT
