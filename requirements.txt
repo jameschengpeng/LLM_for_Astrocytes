@@ -9,3 +9,8 @@ uvicorn[standard]>=0.27.0
 pydantic>=2.6.0
 requests>=2.31.0
 numpy>=1.26.4
+
+# OCR support
+pytesseract>=0.3.13
+Pillow>=10.3.0
+ocrmypdf>=16.0.0
